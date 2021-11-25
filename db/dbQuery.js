@@ -1,15 +1,13 @@
 const mysql = require('mysql');
-const databasename = "sql6440943";
-
+const databasename = "sql6453035";
 var pool = mysql.createPool({
     connectionLimit: 100,
     host: "sql6.freemysqlhosting.net",
-    user: "sql6440943",
-    password: "",
-    database: "sql6440943",
+    user: "sql6453035",
+    password: "R6LeSgFCQY",
+    database: "sql6453035",
     debug: true
 });
-
 function executeQuery(query, callback) {
     pool.getConnection(function(err, connection) {
         if (err) {
@@ -27,7 +25,6 @@ function executeQuery(query, callback) {
         }
     });
 }
-
 function getResult(query, callback) {
     executeQuery(query, function(err, rows) {
         if (!err) {
@@ -37,7 +34,6 @@ function getResult(query, callback) {
         }
     });
 }
-
 module.exports = {
     getResult
 };

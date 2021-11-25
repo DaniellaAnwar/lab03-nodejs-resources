@@ -4,11 +4,11 @@ const loginControl = (request, response) => {
     let username = request.body.username;
     let password = request.body.password;
     if (!username || !password) {
-        response.send('login failed');
+        response.send('Failed Login');
         response.end();
     } else {
         if (request.session && request.session.user) {
-            response.send("Already logged in");
+            response.send("Logged in alreadt");
             response.end();
         } else {
             clientServices.loginService(username, password, function(err, dberr, client) {
@@ -23,7 +23,7 @@ const loginControl = (request, response) => {
                     request.session.user = username;
                     request.session.num_client = client[0].num_client;
                     request.session.admin = false;
-                    response.send(`Login (${username}, ID.${client[0].num_client}) successful!`);
+                    response.send(`Login (${username}, ID.${client[0].num_client}) success`);
                     response.end();
                 }
             });
@@ -34,7 +34,6 @@ const loginControl = (request, response) => {
 
 const registerControl = (request, response) => {
     const clientServices = require('../services/clientServices');
-
     let username = request.body.username;
     let password = request.body.passwsord;
     let society = request.body.society;
@@ -50,34 +49,31 @@ const registerControl = (request, response) => {
     clientServices.registerService(client, function(err, exists, insertedID) {
         console.log("User from register service :" + insertedID);
         if (exists) {
-            console.log("Username taken!");
-            response.send(`registration failed. Username (${username}) already taken!`); //invite to register
+            console.log("Used username");
+            response.send(`failed registeration. Username (${username}) already used!`); 
         } else {
             client.num_client = insertedID;
-            console.log(`Registration (${username}, ${insertedID}) successful!`);
+            console.log(`Registration (${username}, ${insertedID}) success`);
             response.send(`Successful registration ${client.contact} (ID.${client.num_client})!`);
         }
         response.end();
-    });
+   });
 };
-
 const getClients = (request, response) => {
     const clientServices = require('../services/clientServices');
     clientServices.searchService(function(err, rows) {
         response.json(rows);
         response.end();
-    });
+});
 };
-
 const getClientByNumclient = (request, response) => {
     const clientServices = require('../services/clientServices');
     let num_client = request.params.num_client;
     clientServices.searchNumclientService(num_client, function(err, rows) {
         response.json(rows);
         response.end();
-    });
+});
 };
-
 module.exports = {
     loginControl,
     registerControl,

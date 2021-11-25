@@ -1,7 +1,21 @@
-const { Client } = require('../models/entities');
-const clientDAO = require('../daos/clientDAO');
+const clientDAO = require('../db/clientDAO');
 const bcrypt = require("bcryptjs");
 
+class Client {
+    constructor(username, password, num, society, contact, address, zipcode, city, phone, fax, max_outstanding) {
+        this.username = username;
+        this.password = password;
+        this.num = num;
+        this.society = society;
+        this.contact = contact;
+        this.address = address;
+        this.zipcode = zipcode;
+        this.city = city;
+        this.phone = phone;
+        this.fax = fax;
+        this.max_outstanding = max_outstanding;
+    }
+}
 const loginService = (typedUsername, typedPassword, callback) => {
     //check if the user is in the DB
     clientDAO.findByUsername(typedUsername, function(err, rows) {
@@ -42,7 +56,6 @@ const loginService = (typedUsername, typedPassword, callback) => {
         }
     });
 };
-
 const registerService = (client, callback) => {
 
     //check if the user is in the DB
@@ -72,22 +85,34 @@ const registerService = (client, callback) => {
         }
     });
 };
-
 const searchService = function(callback) { //to be completed
 };
-
 const searchNumclientService = function(num_client, callback) {
-    //to be completed
+    clientDAO.findClientByNumber(num_client, function(err, rows) {
+        if (err) {
+            throw err;
+        } else {
+            callback(false, rows);
+        }
+    });
 };
-
+const searchUsernameService = function(username, callback) {
+    clientDAO.findByUsername(username, function(err, rows) {
+        if (err) {
+            throw err;
+        } else {
+            callback(false, rows);
+        }
+    });
+}
 const deleteService = function(num_client, callback) {
     //to be completed
 };
-
 module.exports = {
     loginService,
     registerService,
     searchNumclientService,
     searchService,
-    deleteService
+    deleteService,
+    searchUsernameService,
 };

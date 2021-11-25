@@ -1,6 +1,5 @@
 const database = require('./dbQuery');
 const bcrypt = require("bcryptjs");
-
 //select all clients
 function find(callback) {
     var rows = null;
@@ -8,7 +7,6 @@ function find(callback) {
     //....
     callback(null, rows);
 }
-
 function findByUsername(username, callback) {
     const selectClient = (`SELECT * from account where username like '${username}';`);
     database.getResult(selectClient, function(err, rows) {
@@ -19,7 +17,16 @@ function findByUsername(username, callback) {
         }
     });
 }
-
+function findByNumclient(numclient, callback) {
+    const selectClient = (`SELECT * from account where num_client like '${numclient}';`);
+    database.getResult(selectClient, function(err, rows) {
+        if (!err) {
+            callback(null, rows);
+        } else {
+            console.log(err);
+        }
+    })
+}
 function cryptPassword(pass, callback) {
     //set the complexity of the salt generation
     const saltRounds = 10;
@@ -41,7 +48,6 @@ function cryptPassword(pass, callback) {
         }
     });
 }
-
 function createAccount(num_client, username, password, callback) {
     cryptPassword(password, function(err, hash) {
         console.log(`Hash(${password}) -> ${hash}`);
@@ -56,7 +62,6 @@ function createAccount(num_client, username, password, callback) {
         });
     });
 }
-
 function createClient(client, callback) {
     //insert client
     const insertClient = (`INSERT INTO client(society, contact, addres, zipcode, city, phone, fax, max_outstanding) VALUES('${client.society}', '${client.contact}', '${client.addres}', '${client.zipcode}', '${client.city}', '${client.phone}', '${client.fax}', ${client.max_outstanding});`);

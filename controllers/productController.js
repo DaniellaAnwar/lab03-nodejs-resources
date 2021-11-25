@@ -1,11 +1,10 @@
-const getCatalogue = (request, response) => {
+const getCatalog = (request, response) => {
     const catalogServices = require('../services/productServices');
     catalogServices.searchService(function(err, rows) {
-        response.json(rows);
-        response.end();
+        response.render('catalog', { products: rows });
     });
-};
 
+};
 const getProductByID = (request, response) => {
     const catalogServices = require('../services/productServices');
     let reference = request.params.reference;
@@ -14,7 +13,6 @@ const getProductByID = (request, response) => {
         response.end();
     });
 };
-
 const getProductsByCategory = (request, response) => {
     const catalogServices = require('../services/productServices');
     let reference = request.params.category;
@@ -23,9 +21,8 @@ const getProductsByCategory = (request, response) => {
         response.end();
     });
 };
-
 module.exports = {
-    getCatalogue,
+    getCatalog,
     getProductByID,
     getProductsByCategory
 };
